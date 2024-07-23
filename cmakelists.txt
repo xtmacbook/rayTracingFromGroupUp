@@ -1,0 +1,358 @@
+#---------------------------------------------------------------------------------------------------
+# CMake Build Configuration for the Ray Tracing 
+#
+# See README.md for guidance.
+#---------------------------------------------------------------------------------------------------
+
+cmake_minimum_required ( VERSION 3.1.0...3.27.0 )
+
+set (prjName ht_master_sec)
+
+
+# Project
+project(${projName} C CXX)
+
+# Add c++11 flags
+if (CYGWIN) 
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+else()
+  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
+
+# Source
+set (SOURCE_BRDF_Source
+  src/brdf/BRDF.cpp
+  src/brdf/BTDF.cpp
+  src/brdf/FresnelReflector.cpp
+  src/brdf/GlossySpecular.cpp
+  src/brdf/Lambertian.cpp
+  src/brdf/PerfectSpecular.cpp
+  src/brdf/PerfectTransmitter.cpp
+  src/brdf/FresnelTransmitter.cpp
+  
+
+  include/brdf/BRDF.h
+  include/brdf/BTDF.h
+  include/brdf/FresnelReflector.h
+  include/brdf/GlossySpecular.h
+  include/brdf/Lambertian.h
+  include/brdf/PerfectSpecular.h
+  include/brdf/PerfectTransmitter.h
+  include/brdf/FresnelTransmitter.h
+)
+SOURCE_GROUP("source//BRDF" FILES ${SOURCE_BRDF_Source})
+
+set (SOURCE_Cameras_Source
+  src/camera/Camera.cpp 
+  src/camera/Orthographic.cpp 
+  src/camera/Pinhole.cpp 
+  src/camera/ThinLens.cpp 
+
+  include/camera/Camera.h
+  include/camera/Orthographic.h
+  include/camera/Pinhole.h
+  include/camera/ThinLens.h 
+)
+SOURCE_GROUP("source//camera" FILES ${SOURCE_Cameras_Source})
+
+set (SOURCE_Light_Soruce
+  src/light/Ambient.cpp 
+  src/light/AmbientOccluder.cpp 
+  src/light/AreaLight.cpp 
+  src/light/Directional.cpp 
+  src/light/Light.cpp 
+  src/light/PointLight.cpp
+  
+  include/light/Ambient.h 
+  include/light/AmbientOccluder.h 
+  include/light/AreaLight.h 
+  include/light/Directional.h 
+  include/light/Light.h 
+  include/light/PointLight.h 
+)
+SOURCE_GROUP("source//light" FILES ${SOURCE_Light_Soruce})
+
+
+set (SOURCE_Materials_Source
+  src/material/Emissive.cpp 
+  src/material/Dielectric.cpp 
+  src/material/Material.cpp 
+  src/material/GlossyReflector.cpp 
+  src/material/Matte.cpp 
+  src/material/SV_Emissive.cpp 
+  src/material/Phong.cpp 
+  src/material/SV_GlossyReflector.cpp 
+  src/material/Reflective.cpp 
+  src/material/SV_GlossySpecular.cpp  
+  src/material/SV_Lambertian.cpp  
+  src/material/SV_Matte.cpp  
+  src/material/SV_PerfectSpecular.cpp  
+  src/material/SV_Phong.cpp  
+  src/material/SV_PlaneChecker.cpp  
+  src/material/SV_Reflective.cpp  
+  src/material/Transparent.cpp  
+
+  include/material/Emissive.h
+  include/material/Dielectric.h
+  include/material/Material.h
+  include/material/GlossyReflector.h
+  include/material/Matte.h
+  include/material/SV_Emissive.h
+  include/material/Phong.h
+  include/material/SV_GlossyReflector.h
+  include/material/Reflective.h
+  include/material/SV_GlossySpecular.h 
+  include/material/SV_Lambertian.h 
+  include/material/SV_Matte.h 
+  include/material/SV_PerfectSpecular.h 
+  include/material/SV_Phong.h 
+  include/material/SV_PlaneChecker.h 
+  include/material/SV_Reflective.h 
+  include/material/Transparent.h 
+)
+SOURCE_GROUP("source//materials" FILES ${SOURCE_Materials_Source})
+
+set (SOURCE_Mapping_Source
+  src/mapping/Mapping.cpp 
+  src/mapping/SphericalMap.cpp 
+
+  include/mapping/Mapping.h 
+  include/mapping/SphericalMap.h 
+)
+SOURCE_GROUP("source//mapping" FILES ${SOURCE_Mapping_Source})
+
+set ( SOURCE_Utilities_Source
+  src/misc/BBox.cpp 
+  src/misc/Image.cpp 
+  src/misc/Maths.cpp  
+  src/misc/Matrix.cpp 
+  src/misc/ply.cpp
+  src/misc/Normal.cpp 
+  src/misc/Point2D.cpp 
+  src/misc/Point3D.cpp 
+  src/misc/Ray.cpp 
+  src/misc/RGBColor.cpp 
+  src/misc/ShadeRec.cpp 
+  src/misc/Vector3D.cpp 
+  src/misc/ViewPlane.cpp
+  src/misc/World.cpp
+
+  include/misc/BBox.h
+  include/misc/Image.h
+  include/misc/Maths.h 
+  include/misc/Matrix.h
+  include/misc/ply.h 
+  include/misc/Normal.h
+  include/misc/Point2D.h
+  include/misc/Point3D.h
+  include/misc/Ray.h
+  include/misc/RGBColor.h
+  include/misc/ShadeRec.h
+  include/misc/Vector3D.h
+  include/misc/ViewPlane.h
+  include/misc/World.h
+
+)
+SOURCE_GROUP("source//utilities" FILES ${SOURCE_Utilities_Source})
+
+set (SOURCE_Noise_Source
+  src/noise/CubicNoise.cpp 
+  src/noise/LatticeNoise.cpp 
+  src/noise/LinearNoise.cpp 
+
+  include/noise/CubicNoise.h
+  include/noise/LatticeNoise.h
+  include/noise/LinearNoise.h
+)
+SOURCE_GROUP("source//noise" FILES ${SOURCE_Noise_Source})
+
+
+set (SOURCE_GeometricObjects_Source
+  src/GeometricObjects/Annulus.cpp  
+  src/GeometricObjects/AnnulusPart.cpp
+  src/GeometricObjects/Archway.cpp  
+  src/GeometricObjects/BeveledBox.cpp    
+  src/GeometricObjects/BeveledWedge.cpp  
+  src/GeometricObjects/Compound.cpp   
+  src/GeometricObjects/Disk.cpp  
+  src/GeometricObjects/FishBowl.cpp  
+  src/GeometricObjects/FishBowlFlatBottom.cpp 
+  src/GeometricObjects/FlatMeshTriangle.cpp 
+  src/GeometricObjects/FlatUVMeshTriangle.cpp  
+  src/GeometricObjects/GeometricObject.cpp 
+  src/GeometricObjects/GlassOfWater.cpp  
+  src/GeometricObjects/Globe.cpp  
+  src/GeometricObjects/Grid.cpp  
+  src/GeometricObjects/Instance.cpp  
+  src/GeometricObjects/Mesh.cpp  
+  src/GeometricObjects/MeshTriangle.cpp  
+  src/GeometricObjects/OpenCylinder.cpp  
+  src/GeometricObjects/OpenCylinderConcave.cpp  
+  src/GeometricObjects/OpenCylinderConvex.cpp  
+  src/GeometricObjects/OpenCylinderPartConcave.cpp 
+  src/GeometricObjects/OpenCylinderPartConvex.cpp  
+  src/GeometricObjects/Plane.cpp 
+  src/GeometricObjects/Rectangle.cpp  
+  src/GeometricObjects/Rosette.cpp 
+  src/GeometricObjects/SmoothMeshTriangle.cpp  
+  src/GeometricObjects/SmoothTriangle.cpp 
+  src/GeometricObjects/SmoothUVMeshTriangle.cpp  
+  src/GeometricObjects/SolidCylinder.cpp       
+  src/GeometricObjects/Sphere.cpp  
+  src/GeometricObjects/SphereConcave.cpp 
+  src/GeometricObjects/SpherePartConcave.cpp 
+  src/GeometricObjects/SpherePartConvex.cpp 
+  src/GeometricObjects/Torus.cpp 
+  src/GeometricObjects/TorusPart.cpp 
+  src/GeometricObjects/TorusPartConcave.cpp 
+  src/GeometricObjects/TorusPartConvex.cpp 
+  src/GeometricObjects/Triangle.cpp 
+
+  include/GeometricObjects/Annulus.h  
+  include/GeometricObjects/AnnulusPart.h
+  include/GeometricObjects/Archway.h  
+  include/GeometricObjects/BeveledBox.h    
+  include/GeometricObjects/BeveledWedge.h  
+  include/GeometricObjects/Compound.h   
+  include/GeometricObjects/Disk.h  
+  include/GeometricObjects/FishBowl.h  
+  include/GeometricObjects/FishBowlFlatBottom.h 
+  include/GeometricObjects/FlatMeshTriangle.h 
+  include/GeometricObjects/FlatUVMeshTriangle.h  
+  include/GeometricObjects/GeometricObject.h 
+  include/GeometricObjects/GlassOfWater.h  
+  include/GeometricObjects/Globe.h  
+  include/GeometricObjects/Grid.h  
+  include/GeometricObjects/Instance.h  
+  include/GeometricObjects/Mesh.h  
+  include/GeometricObjects/MeshTriangle.h  
+  include/GeometricObjects/OpenCylinder.h  
+  include/GeometricObjects/OpenCylinderConcave.h  
+  include/GeometricObjects/OpenCylinderConvex.h  
+  include/GeometricObjects/OpenCylinderPartConcave.h 
+  include/GeometricObjects/OpenCylinderPartConvex.h  
+  include/GeometricObjects/Plane.h 
+  include/GeometricObjects/Rectangle.h  
+  include/GeometricObjects/Rosette.h 
+  include/GeometricObjects/SmoothMeshTriangle.h  
+  include/GeometricObjects/SmoothTriangle.h 
+  include/GeometricObjects/SmoothUVMeshTriangle.h  
+  include/GeometricObjects/SolidCylinder.h       
+  include/GeometricObjects/Sphere.h  
+  include/GeometricObjects/SphereConcave.h 
+  include/GeometricObjects/SpherePartConcave.h 
+  include/GeometricObjects/SpherePartConvex.h 
+  include/GeometricObjects/Torus.h 
+  include/GeometricObjects/TorusPart.h 
+  include/GeometricObjects/TorusPartConcave.h 
+  include/GeometricObjects/TorusPartConvex.h 
+  include/GeometricObjects/Triangle.h 
+)
+SOURCE_GROUP("source//GeometricObjects" FILES ${SOURCE_GeometricObjects_Source})
+
+set ( SOURCE_Samplers_Source
+  src/samplers/Jittered.cpp 
+  src/samplers/MultiJittered.cpp 
+  src/samplers/NRooks.cpp 
+  src/samplers/Regular.cpp 
+  src/samplers/NRooks.cpp 
+  src/samplers/Sampler.cpp 
+
+    include/samplers/Jittered.h 
+  include/samplers/MultiJittered.h 
+  include/samplers/NRooks.h 
+  include/samplers/Regular.h 
+  include/samplers/NRooks.h 
+  include/samplers/Sampler.h 
+)
+SOURCE_GROUP("source//samplers" FILES ${SOURCE_Samplers_Source})
+
+set ( SOURCE_Tracers_Source
+  src/tracers/AreaLighting.cpp 
+  src/tracers/RayCast.cpp 
+  src/tracers/Tracer.cpp 
+  src/tracers/Whitted.cpp  
+  src/tracers/GlobalTrace.cpp  
+  src/tracers/PathTrace.cpp  
+
+    include/tracers/AreaLighting.h 
+  include/tracers/RayCast.h 
+  include/tracers/Tracer.h 
+  include/tracers/Whitted.h  
+  include/tracers/GlobalTrace.h  
+  include/tracers/PathTrace.h 
+)
+SOURCE_GROUP("source//tracers" FILES ${SOURCE_Tracers_Source})
+
+
+set (SOURCE_Texture_Source
+  src/texture/Checker3D.cpp 
+  src/texture/ConstantColor.cpp 
+  src/texture/FBmTexture.cpp 
+  src/texture/FBmTextureRamp.cpp 
+  src/texture/FBmTextureWrapped.cpp 
+  src/texture/ImageTexture.cpp 
+  src/texture/InstanceTexture.cpp 
+  src/texture/PlaneChecker.cpp 
+  src/texture/SolidCylinderChecker.cpp 
+  src/texture/SphereChecker.cpp 
+  src/texture/Texture.cpp 
+  src/texture/TurbulenceTexture.cpp 
+  src/texture/Wood.cpp 
+
+  include/texture/Checker3D.h 
+  include/texture/ConstantColor.h 
+  include/texture/FBmTexture.h 
+  include/texture/FBmTextureRamp.h 
+  include/texture/FBmTextureWrapped.h 
+  include/texture/ImageTexture.h 
+  include/texture/InstanceTexture.h 
+  include/texture/PlaneChecker.h 
+  include/texture/SolidCylinderChecker.h 
+  include/texture/SphereChecker.h 
+  include/texture/Texture.h 
+  include/texture/TurbulenceTexture.h 
+  include/texture/Wood.h 
+)
+SOURCE_GROUP("source//texture" FILES ${SOURCE_Texture_Source})
+
+
+SET(RayTracing_SRCS
+  ${SOURCE_BRDF_Source}
+  ${SOURCE_Cameras_Source}
+  ${SOURCE_Light_Soruce}
+  ${SOURCE_Materials_Source}
+  ${SOURCE_Samplers_Source}
+  ${SOURCE_Tracers_Source}
+  ${SOURCE_Utilities_Source}
+  ${SOURCE_Texture_Source}
+  ${SOURCE_GeometricObjects_Source}
+  ${SOURCE_Mapping_Source}
+  ${SOURCE_Noise_Source}
+  
+  src/build/BuildDragon.h
+  main.cpp 
+)
+
+# Executables
+add_executable(${prjName} ${RayTracing_SRCS})
+ 
+include_directories(include/brdf)
+include_directories(include/camera)
+include_directories(include/light)
+include_directories(include/mapping)
+include_directories(include/material)
+include_directories(include/misc)
+include_directories(include/noise)
+include_directories(include/GeometricObjects)
+include_directories(include/samplers)
+include_directories(include/texture)
+include_directories(include/tracers)
+
+# Specific compiler flags below. We're not going to add options for all possible compilers, but if
+# you're new to CMake (like we are), the following may be a helpful example if you're using a
+# different compiler or want to set different compiler options.
+
+ 
